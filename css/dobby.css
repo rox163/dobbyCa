@@ -2,6 +2,8 @@
 
 body {
 	height: 100%;
+	width: auto;
+	min-width: 800px;
 	margin: 0px;
 	padding: 0;
 	line-height: 2em;
@@ -34,18 +36,19 @@ h5 {
 }
 
 #nav_bar {
-	width: auto;
-	min-width: 860px;
+	width: 100%;
 	height: 50px;
 	display: block;
 	position: relative;
 	border-bottom: 2px solid #ddd;
+	background-color: black;
 }
 
 #title {
 	width: 80px;
 	padding: 5px 0px 0 20px;
 	display: block;
+	color: white;
 }
 
 .left {
@@ -60,7 +63,6 @@ h5 {
 	position: relative;
 	display:inline-block;
 	word-wrap:break-word;
-	margin-top: -35px;
 	padding:0.25em 1em;
 	background:#1DA9E0;
 	border:1px solid #198d98;
@@ -75,5 +77,18 @@ h5 {
 	-ms-border-radius:4px;
 	-o-border-radius:4px;-moz-border-radius:4px;
 	-webkit-border-radius:4px;border-radius:4px;
+}
 
+#login_btn {
+	margin-top: -35px;
+	margin-right: 10px;
+}
+
+#content_wrapper {
+	height: 1000px;
+	width: 100%;
+}
+
+#banner {
+	height: 400px;
 }
