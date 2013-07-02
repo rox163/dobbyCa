@@ -4,6 +4,14 @@ body {
     padding-bottom: 40px;
 }
 
+.middle {
+    vertical-align: middle;
+}
+
+.center form {
+    display:inline-block;
+}
+
 /* Custom container */
 .container-narrow {
     margin: 0 auto;
@@ -16,24 +24,29 @@ body {
 /* Main marketing message and sign up button */
 .jumbotron {
     margin: 60px 0;
+}
+.jumbotron h2 {
+    line-height: 1;
     text-align: center;
 }
-.jumbotron h1 {
-    font-size: 72px;
-    line-height: 1;
+
+.selector {
+    margin-top: 10px;
 }
-.jumbotron .btn {
-    font-size: 20px;
-    margin: 9px 0 0 72px;
-    padding: 10px 20px;
-}
-.dropdown {
-    margin: 20px 0 0 75px;
-}
+
 /* Supporting marketing content */
 .marketing {
     margin: 60px 0;
 }
 .marketing p + h4 {
     margin-top: 28px;
+}
+
+.map {
+    width: 100%;
+    height: 400px;
+}
+/** FIX for Bootstrap and Google Maps Info window styes problem **/
+img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+    max-width: none;
 }

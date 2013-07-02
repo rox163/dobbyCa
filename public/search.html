@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>dobby &middot; CA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Roxanne Panthaky">
+
+    <!-- Le styles -->
+    <link href="./bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="./css/dobby.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../bootstrap/img/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9HIWD2e5JgmCVNF59Yq8vA0gTn3X-Hhs&sensor=true">
+    </script>
+    <script type="text/javascript">
+      var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+      var map;
+      function initialize() {
+        var mapOptions = {
+          zoom: 6,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = new google.maps.LatLng(position.coords.latitude,
+                 position.coords.longitude);
+
+              var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: 'Location found using HTML5.'
+            });
+              map.setCenter(pos);
+          }, function() {
+              handleNoGeolocation(true);
+          });
+        } else {
+        // Browser doesn't support Geolocation
+            handleNoGeolocation(false);
+        }
+    }
+
+    function handleNoGeolocation(errorFlag) {
+      if (errorFlag) {
+        var content = 'Error: The Geolocation service failed.';
+      } else {
+        var content = 'Error: Your browser doesn\'t support geolocation.';
+      }
+      var options = {
+        map: map,
+        position: newyork, 
+        content: content
+      };
+      var infowindow = new google.maps.InfoWindow(options);
+      map.setCenter(options.position);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+
+<body>
+    <div class="container-narrow">
+        <div class="masthead">
+            <ul class="nav nav-pills pull-right">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Contact</a></li>
+            </ul>
+            <h3 class="muted">dobby</h3>
+        </div>
+        <hr>
+        <div class="span4 offset1 selector">
+            <select class="selectpicker">
+                <option>Westboro</option>
+                <option>Nepean</option>
+                <option>Barhaven</option>
+            </select>
+        </div>
+        <br>
+        <div class="row-fluid marketing">
+            <div class="span7">
+                <div class="map" id="map-canvas">
+                </div>
+            </div>
+
+            <div class="span5">
+                <h4>Result List</h4>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="footer">
+            <p>&copy; Company 2013</p>
+        </div>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./js/jquery-1.8.2.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-select.min.js"></script>  
+    <script type="text/javascript">$('.selectpicker').selectpicker();</script>
+
+</body>
+</html>

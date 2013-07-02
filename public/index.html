@@ -8,10 +8,10 @@
     <meta name="author" content="Roxanne Panthaky">
 
     <!-- Le styles -->
-    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-
-    <link href="../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../css/dobby.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="./css/dobby.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -32,21 +32,81 @@
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Login</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="#loginModal" data-toggle="modal">Login</a></li>
+            <li><a href="#">About Us</a></li>
             </ul>
             <h3 class="muted">dobby</h3>
         </div>
         <hr>
         <div class="jumbotron">
             <h2>Super marketing speak!</h2>
-            <select class="pull-left dropdown">
-                <option>Westboro</option>
-                <option>Nepean</option>
-                <option>Barhaven</option>
+            <div class="span4 offset3 selector">
+                <select class="selectpicker">
+                    <option>Westboro</option>
+                    <option>Nepean</option>
+                    <option>Barhaven</option>
+                </select>
+            </div>
+            <a class="btn btn-large btn-primary offset1" href="#">Search</a>
+        </div>
+        <!--Login modal-->
+        <div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" id="loginModal">
+          
+            <div class="modal-body">
+                
+                <div class="well">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
+                    <li><a href="#create" data-toggle="tab">Create Account</a></li>
+                  </ul>
+                  <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane active in" id="login">
+                      <form class="form-horizontal" action='' method="POST">
+                        <fieldset>                        
+                        <!-- Username -->  
+                        <div class="control-group">                      
+                            <div class="controls">
+                                <input type="text" id="username" name="username" placeholder="Username" class="input-medium">
+                            </div>
+                                                
+                            <!-- Password-->
+                            <div class="controls">
+                                <input type="password" id="password" name="password" placeholder="Password" class="input-medium">
+                            </div>
+                        </div>
+                         
+                        <div class="control-group">
+                        <!-- Button -->
+                            <div class="controls">
+                              <button class="btn btn-success">Login</button>
+                            </div>
+                        </div>
+                        </fieldset>
+                      </form>                
+                    </div>
+                    <div class="tab-pane fade" id="create">
+                        <form id="tab">
+                            <label>Username</label>
+                            <input type="text" value="" class="input-xlarge">
+                            <label>First Name</label>
+                            <input type="text" value="" class="input-xlarge">
+                            <label>Last Name</label>
+                            <input type="text" value="" class="input-xlarge">
+                            <label>Email</label>
+                            <input type="text" value="" class="input-xlarge">
+                            <label>Address</label>
+                            <textarea value="Smith" rows="3" class="input-xlarge">
+                            </textarea>
 
-            </select>
-            <a class="btn btn-large btn-success" href="#">Search</a>
+                            <div>
+                                <button class="btn btn-primary">Create Account</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
         <hr>
         <div class="row-fluid marketing">
@@ -74,8 +134,9 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../js/jquery-1.8.2.min.js"></script>
-    <script src="../bootstrap/js/bootstrap.min.js"></script>
-
+    <script src="./js/jquery-1.8.2.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>    
+    <script src="./bootstrap/js/bootstrap-select.min.js"></script>  
+    <script type="text/javascript">$('.selectpicker').selectpicker();</script>
 </body>
 </html>
