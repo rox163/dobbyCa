@@ -8,14 +8,12 @@ import (
 )
 
 type Walker struct {
-	FirstName string
-	LastName string
-	Phone string
-	//support more than one area?
-	WalkingArea string
+	Name     string
+	Phone    string
+	Postcode string
 }
 
-const lenSearchPath = len("/search/")
+const lenSearchPath = len("/walkers")
 
 func Dobby(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Path[1:]
@@ -23,15 +21,15 @@ func Dobby(w http.ResponseWriter, r *http.Request) {
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
-	params := r.URL.Path[lenSearchPath:]
+	//params := r.URL.Path[lenSearchPath:]
 
 }
 
 func main() {
 	http.Handle("/", http.FileServer(http.Dir("public")))
 	http.HandleFunc("/dobby", Dobby)
-	http.HandleFunc("/search/", searchHandler)
-	
+	http.HandleFunc("/walkers", searchHandler)
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Printf("Error in webserver: %v", err)

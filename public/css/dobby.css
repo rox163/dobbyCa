@@ -50,3 +50,24 @@ body {
 img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
     max-width: none;
 }
+
+#loginModal {
+    width: 300px;
+    margin-left: -150px;
+}
+
+@media (max-width: 767px) {
+    #loginModal {
+        width: 300px;
+        margin-left: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    #loginModal {
+        width: 300px;
+        margin-left: 50px;
+    }
+}
+
+

@@ -31,7 +31,6 @@
     <div class="container-narrow">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#">Home</a></li>
             <li><a href="#loginModal" data-toggle="modal">Login</a></li>
             <li><a href="#">About Us</a></li>
             </ul>
@@ -39,7 +38,7 @@
         </div>
         <hr>
         <div class="jumbotron">
-            <h2>Super marketing speak!</h2>
+            <h2>Find a walker!</h2>
             <div class="span4 offset3 selector">
                 <select class="selectpicker">
                     <option>Westboro</option>
@@ -51,9 +50,7 @@
         </div>
         <!--Login modal-->
         <div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" id="loginModal">
-          
             <div class="modal-body">
-                
                 <div class="well">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                   <ul class="nav nav-tabs">
@@ -62,20 +59,19 @@
                   </ul>
                   <div id="myTabContent" class="tab-content">
                     <div class="tab-pane active in" id="login">
-                      <form class="form-horizontal" action='' method="POST">
-                        <fieldset>                        
-                        <!-- Username -->  
-                        <div class="control-group">                      
+                      <form action='' method="POST">
+                        <fieldset>
+                        <!-- Username -->
+                        <div class="control-group">
                             <div class="controls">
                                 <input type="text" id="username" name="username" placeholder="Username" class="input-medium">
                             </div>
-                                                
                             <!-- Password-->
                             <div class="controls">
                                 <input type="password" id="password" name="password" placeholder="Password" class="input-medium">
                             </div>
                         </div>
-                         
+
                         <div class="control-group">
                         <!-- Button -->
                             <div class="controls">
@@ -83,22 +79,15 @@
                             </div>
                         </div>
                         </fieldset>
-                      </form>                
+                      </form>
                     </div>
                     <div class="tab-pane fade" id="create">
                         <form id="tab">
-                            <label>Username</label>
-                            <input type="text" value="" class="input-xlarge">
-                            <label>First Name</label>
-                            <input type="text" value="" class="input-xlarge">
-                            <label>Last Name</label>
-                            <input type="text" value="" class="input-xlarge">
-                            <label>Email</label>
-                            <input type="text" value="" class="input-xlarge">
-                            <label>Address</label>
-                            <textarea value="Smith" rows="3" class="input-xlarge">
-                            </textarea>
-
+                            <input type="text" placeholder="Name" value="" class="input-large">
+                            <input type="password" placeholder="Password" value="" class="input-large">
+                            <input type="text" placeholder="1232342534" class="input-large">
+                            <input type="email" placeholder="test@abc.com" value="" class="input-large">
+                            <input type="text" placeholder="Postal code" value="" class="input-large">
                             <div>
                                 <button class="btn btn-primary">Create Account</button>
                             </div>
@@ -111,20 +100,18 @@
         <hr>
         <div class="row-fluid marketing">
             <div class="span6">
-                <h4>Subheading</h4>
+                <h4 class="text-center">Subheading</h4>
                 <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
                 <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
             </div>
 
             <div class="span6">
-                <h4>Subheading</h4>
+                <h4 class="text-center">Subheading</h4>
                 <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
                 <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
             </div>
         </div>
-
         <hr>
-
         <div class="footer">
             <p>&copy; Company 2013</p>
         </div>
@@ -135,8 +122,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./js/jquery-1.8.2.min.js"></script>
-    <script src="./bootstrap/js/bootstrap.min.js"></script>    
-    <script src="./bootstrap/js/bootstrap-select.min.js"></script>  
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">$('.selectpicker').selectpicker();</script>
 </body>
 </html>

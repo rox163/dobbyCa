@@ -27,60 +27,12 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9HIWD2e5JgmCVNF59Yq8vA0gTn3X-Hhs&sensor=true">
     </script>
-    <script type="text/javascript">
-      var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
-      var map;
-      function initialize() {
-        var mapOptions = {
-          zoom: 6,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              var pos = new google.maps.LatLng(position.coords.latitude,
-                 position.coords.longitude);
-
-              var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: 'Location found using HTML5.'
-            });
-              map.setCenter(pos);
-          }, function() {
-              handleNoGeolocation(true);
-          });
-        } else {
-        // Browser doesn't support Geolocation
-            handleNoGeolocation(false);
-        }
-    }
-
-    function handleNoGeolocation(errorFlag) {
-      if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-      } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-      }
-      var options = {
-        map: map,
-        position: newyork, 
-        content: content
-      };
-      var infowindow = new google.maps.InfoWindow(options);
-      map.setCenter(options.position);
-    }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
 </head>
 
 <body>
     <div class="container-narrow">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
-            <li><a href="#">Home</a></li>
             <li><a href="#">Login</a></li>
             <li><a href="#">Contact</a></li>
             </ul>
@@ -102,12 +54,23 @@
             </div>
 
             <div class="span5">
-                <h4>Result List</h4>
+                <table class="table" data-bind="foreach: walkers">
+                    <tr class="lead" data-bind="text: name">
+                    </tr>
+                    <tr>
+                        <td data-bind="text: phone"/>
+                        <td data-bind="text: postcode"/>
+                        <td>
+                            <a class="btn" data-bind="attr: {href: 'mailto:' + email}" data-toggle="tooltip" title="Email"> <i class="icon-envelope"></i> </a>
+                        </td>
+                        <td>
+                            <a class="btn" data-toggle="tooltip" title="Direct message" href="#messageModal"><i class="icon-comment"></i> </a>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
-
         <hr>
-
         <div class="footer">
             <p>&copy; Company 2013</p>
         </div>
@@ -119,8 +82,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./js/jquery-1.8.2.min.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
-    <script src="./bootstrap/js/bootstrap-select.min.js"></script>  
+    <script src="./bootstrap/js/bootstrap-select.min.js"></script>
+    <script type='text/javascript' src='./js/knockout-2.2.1.js'></script>
     <script type="text/javascript">$('.selectpicker').selectpicker();</script>
+    <script src="./js/walkers.js"></script>
 
 </body>
 </html>
