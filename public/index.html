@@ -13,22 +13,23 @@
     <link href="./bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./css/dobby.css" rel="stylesheet">
 
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
     <![endif]-->
 
-    <!-- Fav and touch icons -->
+    <!-- Fav and touch icons 
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../bootstrap/img/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">-->
 </head>
 
 <body>
-
-    <div class="container-narrow">
+    <div class="container">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
             <li><a href="#loginModal" data-toggle="modal">Login</a></li>
@@ -38,15 +39,21 @@
         </div>
         <hr>
         <div class="jumbotron">
-            <h2>Find a walker!</h2>
-            <div class="span4 offset3 selector">
-                <select class="selectpicker">
-                    <option>Westboro</option>
-                    <option>Nepean</option>
-                    <option>Barhaven</option>
-                </select>
+            <h2 class="center">Find a walker in your area!</h2>
+            <div class="row top-buffer">
+                <div class="span2 offset3">
+                    <input class="input-medium search-query postcode" type="text" placeholder="Enter your postal code"/>
+                </div>
+                <div class="span2 offset2">
+                    <a id="Submit" class="btn btn-large btn-primary" href="#">Search</a>
+                    <script type="text/javascript">
+                    $("#Submit").click(function() {
+                        alert("Handler for .click() called.");
+                    });
+                    </script>
+                </div>
+                
             </div>
-            <a class="btn btn-large btn-primary offset1" href="#">Search</a>
         </div>
         <!--Login modal-->
         <div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" id="loginModal">
@@ -121,7 +128,7 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./js/jquery-1.8.2.min.js"></script>
+<!-- <script src="./js/jquery-1.8.2.min.js"></script> -->
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="./bootstrap/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">$('.selectpicker').selectpicker();</script>

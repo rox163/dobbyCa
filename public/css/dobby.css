@@ -8,17 +8,19 @@ body {
     vertical-align: middle;
 }
 
+.center { 
+    float: none; margin: 0 auto;
+    text-align: center; 
+    display: block; 
+    width:auto; height:auto;
+}
+
 .center form {
     display:inline-block;
 }
 
-/* Custom container */
-.container-narrow {
-    margin: 0 auto;
-    max-width: 800px;
-}
-.container-narrow > hr {
-    margin: 20px 0;
+.top-buffer {
+    margin-top: 10px;
 }
 
 /* Main marketing message and sign up button */
@@ -28,10 +30,6 @@ body {
 .jumbotron h2 {
     line-height: 1;
     text-align: center;
-}
-
-.selector {
-    margin-top: 10px;
 }
 
 /* Supporting marketing content */
@@ -70,4 +68,7 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
     }
 }
 
+.postcode {
+    margin-top: 7px;
+}
 
