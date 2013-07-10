@@ -18,6 +18,9 @@
       <script src="../assets/js/html5shiv.js"></script>
     <![endif]-->
 
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
     <!-- Fav and touch icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../bootstrap/img/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
@@ -30,7 +33,7 @@
 </head>
 
 <body>
-    <div class="container-narrow">
+    <div class="container">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
             <li><a href="#">Login</a></li>
@@ -39,12 +42,8 @@
             <h3 class="muted">dobby</h3>
         </div>
         <hr>
-        <div class="span4 offset1 selector">
-            <select class="selectpicker">
-                <option>Westboro</option>
-                <option>Nepean</option>
-                <option>Barhaven</option>
-            </select>
+        <div class="span4 offset1">
+            <input id="postcode_input" class="input-medium search-query postcode" type="text"/>
         </div>
         <br>
         <div class="row-fluid marketing">
@@ -80,7 +79,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./js/jquery-1.8.2.min.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="./bootstrap/js/bootstrap-select.min.js"></script>
     <script type='text/javascript' src='./js/knockout-2.2.1.js'></script>

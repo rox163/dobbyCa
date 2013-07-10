@@ -1,26 +1,48 @@
-var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+var ottawa = new google.maps.LatLng(45.4214, -75.6919);
 var map;
 var geocoder;
-var walkerArray = [
-        new DogWalker("Pam Beasley", "8194561234", "asd@asd.com", "k1y4x8"),
-        new DogWalker("Jim Halpert", "6131234563", "TEST@test.com", "k2b8e5"),
-        new DogWalker("Michael Scott", "4561212123", "erty@asd.com", "k2b7g9")
-        ];
+var walkerData = [ 
+    {name: "Pam Beasley", phone: "8194561234", email: "asd@asd.com", postcode: "k1y4x8"},
+    {name: "Jim Halpert", phone: "6131234563", email: "TEST@test.com", postcode: "k2b8e5"},
+    {name: "Michael Scott", phone: "4561212123", email:"erty@asd.com", postcode: "k2b7g9"}
+];
 
-function DogWalker(name, phone, email, postcode) {
+function DogWalker() {
     var self = this;
-    self.name = name;
-    self.phone = phone;
-    self.email = email;
-    self.postcode = postcode;
+    self.name = ko.observable();
+    self.phone = ko.observable();
+    self.email = ko.observable();
+    self.postcode = ko.observable();
 }
 
 function ResultsViewModel() {
     var self = this;
-    self.walkers = ko.observableArray(walkerArray);
-}
+    self.walkers = ko.observableArray(walkerData);
 
-ko.applyBindings(new ResultsViewModel());
+    self.query = ko.observable('');
+    self.showWalkers = ko.observable(false);
+
+    self.search = function() {
+
+        // for (var i in self.walkers) {
+        //     if (self.walkers[i].postcode.toLowerCase().indexOf(self.query.toLowerCase()) <= 0) {
+        //         self.walkers.remove(self.walkers[i]);
+        //     }
+        // }
+        alert("Handler for .click() called. " + $("#postcode_input").val());
+        resultsModel.showWalkers(true);
+    }
+    // for (var i = 0; i < json.length; i++) {
+        
+    //     var item = new DogWalker(json[i]);
+    //     console.log(item.phone)
+    //     self.walkers.push(item);
+    // }
+}
+var resultsModel = new ResultsViewModel();
+resultsModel.query.subscribe(resultsModel.search);
+ko.applyBindings(resultsModel);
+
 
 // Map loading
 function initialize() {
@@ -56,8 +78,9 @@ function initialize() {
 
 function plotMarkers() {
     var marker, i;
-    for (i=0; i < walkerArray.length; i++) {
-        codeAddress(walkerArray[i].postcode);
+    for (i=0; i < walkerData.length; i++) {
+        //remove hardcoded data
+        codeAddress(walkerData[i].postcode);
     }
 }
 
@@ -83,7 +106,7 @@ function handleNoGeolocation(errorFlag) {
     }
     var options = {
         map: map,
-        position: newyork,
+        position: ottawa,
         content: content
     };
     var infowindow = new google.maps.InfoWindow(options);
