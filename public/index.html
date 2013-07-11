@@ -49,8 +49,7 @@
                 </div>
                 <div class="span2 offset2">
                     <a id="Submit" class="btn btn-large btn-primary" data-bind="click: search">Search</a>
-                </div>
-                
+                </div>                
             </div>
         </div>
         <!--Login modal-->
@@ -102,8 +101,7 @@
                 </div>
             </div>
         </div>
-        <hr>
-        
+        <hr>        
         <div data-bind="css: {hide: showWalkers}" class="row-fluid marketing">
             <div class="span6">
                 <h4 class="text-center">Subheading</h4>
@@ -116,38 +114,35 @@
                 <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
             </div>
         </div>
-        <div class="row-fluid marketing" data-bind="visible:showWalkers">
+        <div class="row-fluid" data-bind="visible:showWalkers">
             <div class="span6">
                 <div class="map" id="map-canvas"></div>
-            </div>        
-            <div class="span6">
+            </div> 
+            <div class="span6" id="result-list">                   
                 <table class="table" data-bind="template: {name:'walker-template', foreach: walkers}"/>
-            </div>
-        </div>
-        
-        <script type="text/html" id="walker-template">
-            <tr class="lead" data-bind="text: name">
-            </tr>
-            <tr>
-                <td data-bind="text: phone"/>
-                <td data-bind="text: postcode"/>
-                <td>
-                    <a class="btn" data-bind="attr: {href: 'mailto:' + email}" data-toggle="tooltip" title="Email"> <i class="icon-envelope"></i> </a>
-                </td>
-                <td>
-                    <a class="btn" data-toggle="tooltip" title="Direct message" href="#messageModal"><i class="icon-comment"></i> </a>
-                </td>
-            </tr>        
-        </script>
-
-        <hr>
-        <div class="footer">
-            <p>&copy; Company 2013</p>
-        </div>
+                <script type="text/html" id="walker-template">
+                    <tr class="lead" data-bind="text: name"></tr>
+                    <tr>
+                        <td data-bind="text: phone"/>
+                        <td data-bind="text: postcode"/>
+                        <td>
+                            <a class="btn" data-bind="attr: {href: 'mailto:' + email}" data-toggle="tooltip" title="Email"> <i class="icon-envelope"></i> </a>
+                        </td>
+                        <td>
+                            <a class="btn" data-toggle="tooltip" title="Direct message" href="#messageModal"><i class="icon-comment"></i> </a>
+                        </td>
+                    </tr>        
+                </script>
+            </div>            
+        </div>       
 
     </div> <!-- /container -->
 
-
+ 
+        <!-- <hr>
+        <div class="footer">
+            <p>&copy; Company 2013</p>
+        </div> -->
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

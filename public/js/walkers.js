@@ -17,32 +17,21 @@ function DogWalker() {
 
 function ResultsViewModel() {
     var self = this;
-    self.walkers = ko.observableArray(walkerData);
-
     self.query = ko.observable('');
     self.showWalkers = ko.observable(false);
-
     self.search = function() {
+        self.showWalkers(true);        
+    }   
 
-        // for (var i in self.walkers) {
-        //     if (self.walkers[i].postcode.toLowerCase().indexOf(self.query.toLowerCase()) <= 0) {
-        //         self.walkers.remove(self.walkers[i]);
-        //     }
-        // }
-        alert("Handler for .click() called. " + $("#postcode_input").val());
-        resultsModel.showWalkers(true);
-    }
-    // for (var i = 0; i < json.length; i++) {
-        
-    //     var item = new DogWalker(json[i]);
-    //     console.log(item.phone)
-    //     self.walkers.push(item);
-    // }
+    self.walkers = ko.dependentObservable(function() {
+        return ko.utils.arrayFilter(walkerData, function (walker) {
+            return walker.postcode.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+        });
+    });    
+
 }
 var resultsModel = new ResultsViewModel();
 resultsModel.query.subscribe(resultsModel.search);
-ko.applyBindings(resultsModel);
-
 
 // Map loading
 function initialize() {
@@ -85,7 +74,6 @@ function plotMarkers() {
 }
 
 function codeAddress(postcode) {
-    console.log(postcode);
     geocoder.geocode( {'address': postcode}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             marker = new google.maps.Marker({
@@ -114,3 +102,4 @@ function handleNoGeolocation(errorFlag) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+ko.applyBindings(resultsModel);
