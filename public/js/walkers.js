@@ -1,11 +1,20 @@
 var ottawa = new google.maps.LatLng(45.4214, -75.6919);
 var map;
+var markers = [];
 var geocoder;
 var walkerData = [ 
     {name: "Pam Beasley", phone: "8194561234", email: "asd@asd.com", postcode: "k1y4x8"},
     {name: "Jim Halpert", phone: "6131234563", email: "TEST@test.com", postcode: "k2b8e5"},
     {name: "Michael Scott", phone: "4561212123", email:"erty@asd.com", postcode: "k2b7g9"}
 ];
+
+// var simulatedAjaxData = {
+//     'persons' : [
+//         { firstName: "John", lastName: "Smith" },
+//         { firstName: "Sgt.", lastName: "Shiney-Sides" },
+//         { firstName: "Rusty", lastName: "Schacklefurt" }
+//     ]
+// };
 
 function DogWalker() {
     var self = this;
@@ -17,21 +26,24 @@ function DogWalker() {
 
 function ResultsViewModel() {
     var self = this;
-    self.query = ko.observable('');
-    self.showWalkers = ko.observable(false);
+    self.k_query = ko.observable('');
+    self.k_showWalkers = ko.observable(false);
     self.search = function() {
-        self.showWalkers(true);        
+        self.k_showWalkers(true);   
+        plotMarkers();     
     }   
-
-    self.walkers = ko.dependentObservable(function() {
+    
+    self.k_walkers = ko.dependentObservable(function() {
         return ko.utils.arrayFilter(walkerData, function (walker) {
-            return walker.postcode.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+            return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
     });    
-
+    
 }
+
 var resultsModel = new ResultsViewModel();
-resultsModel.query.subscribe(resultsModel.search);
+resultsModel.k_query.subscribe(resultsModel.search);
+ko.applyBindings(resultsModel);
 
 // Map loading
 function initialize() {
@@ -61,29 +73,40 @@ function initialize() {
         handleNoGeolocation(false);
     }
     console.log("done");
-    plotMarkers();
-
 }
 
+google.maps.event.addDomListener(window, 'load', initialize);
+
 function plotMarkers() {
-    var marker, i;
-    for (i=0; i < walkerData.length; i++) {
+   
+    var filtered_walkers = resultsModel.k_walkers();
+    setAllMap(null);
+    markers = [];
+    for (var i=0; i < filtered_walkers.length; i++) {
         //remove hardcoded data
-        codeAddress(walkerData[i].postcode);
+        codeAddress(filtered_walkers[i].postcode);
     }
+    setAllMap(map);
 }
 
 function codeAddress(postcode) {
     geocoder.geocode( {'address': postcode}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-            marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 position: results[0].geometry.location,
                 map: map
             });
+            markers.push(marker);
         } else {
             console.log("Geocode was not successful for the following reason: " + status);
         }
     });
+}
+
+function setAllMap(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
 }
 
 function handleNoGeolocation(errorFlag) {
@@ -101,5 +124,3 @@ function handleNoGeolocation(errorFlag) {
     map.setCenter(options.position);
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
-ko.applyBindings(resultsModel);
