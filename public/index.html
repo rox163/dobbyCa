@@ -121,7 +121,7 @@
             <div class="span6" id="result-list">                   
                 <table class="table" data-bind="template: {name:'walker-template', foreach: k_walkers}"/>
                 <script type="text/html" id="walker-template">
-                    <tr class="lead" data-bind="text: name"></tr>
+                    <tr class="lead point" data-bind="click: $parent.showDetail,text: user"></tr>
                     <tr>
                         <td data-bind="text: phone"/>
                         <td data-bind="text: postcode"/>
