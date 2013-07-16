@@ -22,7 +22,6 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9HIWD2e5JgmCVNF59Yq8vA0gTn3X-Hhs&sensor=true">
     </script>
-
     <!-- Fav and touch icons 
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../bootstrap/img/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
@@ -35,7 +34,7 @@
     <div class="container">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
-            <li><a href="#loginModal" data-toggle="modal">Login</a></li>
+            <li><a href="#loginModal" data-toggle="modal">Walker Login</a></li>
             <li><a href="#">About Us</a></li>
             </ul>
             <h3 class="muted">dobby</h3>
@@ -121,7 +120,7 @@
             <div class="span6" id="result-list">                   
                 <table class="table" data-bind="template: {name:'walker-template', foreach: k_walkers}"/>
                 <script type="text/html" id="walker-template">
-                    <tr class="lead point" data-bind="click: $parent.showDetail,text: user"></tr>
+                    <tr class="lead point hover" data-bind="click: $parent.showDetail,text: user"></tr>
                     <tr>
                         <td data-bind="text: phone"/>
                         <td data-bind="text: postcode"/>

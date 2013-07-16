@@ -10,6 +10,8 @@ var walkerData = [
     new DogWalker("Jim Halpert", "6131234563", "TEST@test.com", "k2b8e5"),
     new DogWalker("Michael Scott", "4561212123", "erty@asd.com", "k2b7g9")
 ];
+// [{"name":"Pam Beasley","phone":"8194561234","email":"asd@asd.com","postcode":"k1y4x8"},
+// {"name":"Jim Halpert","phone":"6131234563","email":"TEST@test.com","postcode":"k2b8e5"}]
 
 // var simulatedAjaxData = {
 //     'persons' : [
@@ -61,6 +63,15 @@ function ResultsViewModel() {
         }
     }         
 }
+
+    $.ajax({
+        url:'/walkers',
+        type:'GET',
+        dataType:'JSONP',
+        success: function(data) {
+            console.log(data);
+        }
+    });
 
 var resultsModel = new ResultsViewModel();
 resultsModel.k_query.subscribe(resultsModel.search);
