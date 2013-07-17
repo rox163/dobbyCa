@@ -65,9 +65,9 @@ function ResultsViewModel() {
 }
 
     $.ajax({
-        url:'/walkers',
+        url:'/api/walkers',
         type:'GET',
-        dataType:'JSONP',
+        dataType:'json',
         success: function(data) {
             console.log(data);
         }
