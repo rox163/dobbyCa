@@ -61,17 +61,28 @@ function ResultsViewModel() {
                 infowindow.open(map, markers[i]);
             }
         }
-    }         
+    }
+
+    self.createWalker = function() {
+        $.ajax({
+            url:'/api/walkers',
+            type:'POST',
+            dataType:'json',
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }        
 }
 
-    $.ajax({
-        url:'/api/walkers',
-        type:'GET',
-        dataType:'json',
-        success: function(data) {
-            console.log(data);
-        }
-    });
+$.ajax({
+    url:'/api/walkers',
+    type:'GET',
+    dataType:'json',
+    success: function(data) {
+        console.log(data);
+    }
+});
 
 var resultsModel = new ResultsViewModel();
 resultsModel.k_query.subscribe(resultsModel.search);
