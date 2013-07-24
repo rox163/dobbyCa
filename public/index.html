@@ -48,7 +48,7 @@
                 </div>
                 <div class="span2 offset2">
                     <a id="Submit" class="btn btn-large btn-primary" data-bind="click: search">Search</a>
-                </div>                
+                </div>
             </div>
         </div>
         <!--Login modal-->
@@ -62,7 +62,7 @@
                   </ul>
                   <div id="myTabContent" class="tab-content">
                     <div class="tab-pane active in" id="login">
-                      <form action='' method="POST">
+                      <form>
                         <fieldset>
                         <!-- Username -->
                         <div class="control-group">
@@ -74,7 +74,6 @@
                                 <input type="password" id="password" name="password" placeholder="Password" class="input-medium">
                             </div>
                         </div>
-
                         <div class="control-group">
                         <!-- Button -->
                             <div class="controls">
@@ -85,14 +84,14 @@
                       </form>
                     </div>
                     <div class="tab-pane fade" id="create">
-                        <form id="tab">
-                            <input type="text" placeholder="Name" value="" class="input-large">
+                        <form id="create_tab" data-bind="submit: createWalker">
+                            <input id="new_user" type="text" placeholder="Name" value="" class="input-large">
                             <input type="password" placeholder="Password" value="" class="input-large">
-                            <input type="text" placeholder="1232342534" class="input-large">
-                            <input type="email" placeholder="test@abc.com" value="" class="input-large">
-                            <input type="text" placeholder="Postal code" value="" class="input-large">
+                            <input id="new_phone" type="text" placeholder="1232342534" class="input-large">
+                            <input id="new_email" type="email" placeholder="test@abc.com" value="" class="input-large">
+                            <input id="new_postcode" type="text" placeholder="Postal code" value="" class="input-large">
                             <div>
-                                <button class="btn btn-primary" data-bind="click: createWalker">Create Account</button>
+                                <button class="btn btn-success" data-bind="click: createWalker">Create Account</button>
                             </div>
                         </form>
                     </div>
@@ -117,7 +116,7 @@
             <div class="span6">
                 <div class="map" id="map-canvas"></div>
             </div> 
-            <div class="span6" id="result-list">                   
+            <div class="span6" id="result-list">
                 <table class="table" data-bind="template: {name:'walker-template', foreach: k_walkers}"/>
                 <script type="text/html" id="walker-template">
                     <tr class="lead point hover" data-bind="click: $parent.showDetail,text: user"></tr>

@@ -5,14 +5,17 @@ var geocoder = new google.maps.Geocoder();;
 
 var infowindow = new google.maps.InfoWindow();
 var contentString = '<div>' + '<h3>%user</h3>' + '<div>' + '<p>%phone</p>' + '</div>' + '</div>'; 
-var walkerData = [ 
+var walkerData = [
     new DogWalker("Pam Beasley", "8194561234", "asd@asd.com", "k1y4x8"),
     new DogWalker("Jim Halpert", "6131234563", "TEST@test.com", "k2b8e5"),
     new DogWalker("Michael Scott", "4561212123", "erty@asd.com", "k2b7g9")
 ];
-// [{"name":"Pam Beasley","phone":"8194561234","email":"asd@asd.com","postcode":"k1y4x8"},
-// {"name":"Jim Halpert","phone":"6131234563","email":"TEST@test.com","postcode":"k2b8e5"}]
-
+// {
+//        "User": "Dwight",
+//        "Phone": "6472342334",
+//        "Email": "dwight@gmgirn.com",
+//        "Postcode": "ky4x8"
+// }
 // var simulatedAjaxData = {
 //     'persons' : [
 //         { firstuser: "John", lastuser: "Smith" },
@@ -32,7 +35,6 @@ function DogWalker(user, phone, email, postcode) {
                 self.lat_long = results[0].geometry.location;
             }
         });
-    
 }
 
 function ResultsViewModel() {
@@ -41,20 +43,19 @@ function ResultsViewModel() {
     self.k_showWalkers = ko.observable(false);
 
     self.search = function() {
-        self.k_showWalkers(true);   
-        plotMarkers();     
-    }   
+        self.k_showWalkers(true);
+        plotMarkers();
+    }
     self.k_walkers = ko.dependentObservable(function() {
         return ko.utils.arrayFilter(walkerData, function(walker) {
             return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
-    }); 
+    });
 
      //Show info window over map marker when walker user is clicked
     self.showDetail = function(walker) {
         for (var i = 0; i < markers.length; i++) {
-            //can we compare these?
-            if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(), 
+            if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(),
                 walker.lat_long.lat(), walker.lat_long.lng()) <= 0.1 ) {
                 infowindow.close();
                 infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
@@ -64,15 +65,24 @@ function ResultsViewModel() {
     }
 
     self.createWalker = function() {
+        var dataToSave = new DogWalker(document.getElementById("new_user").value, document.getElementById("new_phone").value, 
+            document.getElementById("new_email").value, document.getElementById("new_postcode").value);
         $.ajax({
-            url:'/api/walkers',
-            type:'POST',
-            dataType:'json',
-            success: function(data) {
-                console.log(data);
-            }
+            url: "/api/walkers",
+            type: "POST",
+            data: JSON.stringify(dataToSave),
+            processData:false,
+            contentType: "application/json",
+            dataType:"json",
+            success: function (result) {
+                    alert("Success");
+                     },
+            error: function (result) {
+                alert(result.responseText);
+                }
         });
-    }        
+
+    }
 }
 
 $.ajax({
@@ -90,7 +100,7 @@ ko.applyBindings(resultsModel);
 
 // Map loading
 function initialize() {
-    
+
     var mapOptions = {
         zoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -119,7 +129,7 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-function plotMarkers() {   
+function plotMarkers() {
     var filtered_walkers = resultsModel.k_walkers();
     setAllMap(null);
     markers = [];
@@ -139,7 +149,7 @@ function codeAddress(walker) {
                 position: results[0].geometry.location,
                 map: map,
                 title: walker.user
-            });           
+            });
         } else {
             console.log("Geocode was not successful for the following reason: " + status);
         }
@@ -179,13 +189,13 @@ function handleNoGeolocation(errorFlag) {
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  var dLon = deg2rad(lon2-lon1); 
-  var a = 
+  var dLon = deg2rad(lon2-lon1);
+  var a =
     Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
     Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c; // Distance in km
   return d;
 }
