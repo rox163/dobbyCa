@@ -52,13 +52,6 @@ func (serv WalkerService) ListWalkers() []WalkerType {
 }
 
 func (serv WalkerService) AddWalker(postedObj WalkerType) {
-	// expected format
-	// {
-	//        "User": "Dwight",
-	//        "Phone": "6472342334",
-	//        "Email": "dwight@gmgirn.com",
-	//        "Postcode": "ky4x8"
-	// }
 	log.Printf("Walker: %+v", postedObj)
 	if postedObj.Uid != "" {
 		serv.ResponseBuilder().SetResponseCode(400)

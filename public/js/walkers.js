@@ -81,6 +81,8 @@ function ResultsViewModel() {
                 alert(result.responseText);
                 }
         });
+        $('#create_tab')[0].reset();
+        $('#loginModal').modal('hide');
 
     }
 }
@@ -90,9 +92,11 @@ $.ajax({
     type:'GET',
     dataType:'json',
     success: function(data) {
-        console.log(data);
+        console.log("get all walkers success");
     }
 });
+
+$('a[data-toggle="tab"]:first').tab('show');
 
 var resultsModel = new ResultsViewModel();
 resultsModel.k_query.subscribe(resultsModel.search);
