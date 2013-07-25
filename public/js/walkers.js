@@ -37,22 +37,44 @@ function DogWalker(user, phone, email, postcode) {
         });
 }
 
+ko.validation.init({
+    parseInputAttributes: false,
+    decorateElement: true,
+    insertMessages: true,
+    messagesOnModified: true,
+    grouping: { deep: true, observable: true }
+});
+
 function ResultsViewModel() {
     var self = this;
     self.k_query = ko.observable('');
+    // controls visibility of the list
     self.k_showWalkers = ko.observable(false);
 
-    self.search = function() {
-        self.k_showWalkers(true);
-        plotMarkers();
-    }
+    // login modal observables
+    self.k_new_user = ko.observable().extend({ required: true, minLength: 2 });
+    self.k_new_phone = ko.observable().extend({ 
+        required: true, 
+        pattern: {
+                    message: '10 digit number only',
+                    params: '^[2-9]{3}[0-9]{7}$'
+                 } 
+        });
+    self.k_new_email = ko.observable().extend({ required: true, email: true });
+    self.k_new_postcode = ko.observable().extend({ required: true });
+
     self.k_walkers = ko.dependentObservable(function() {
         return ko.utils.arrayFilter(walkerData, function(walker) {
             return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
     });
 
-     //Show info window over map marker when walker user is clicked
+    self.search = function() {
+        self.k_showWalkers(true);
+        plotMarkers();
+    }
+
+    //Show info window over map marker when walker user is clicked
     self.showDetail = function(walker) {
         for (var i = 0; i < markers.length; i++) {
             if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(),
@@ -64,9 +86,23 @@ function ResultsViewModel() {
         }
     }
 
-    self.createWalker = function() {
-        var dataToSave = new DogWalker(document.getElementById("new_user").value, document.getElementById("new_phone").value, 
-            document.getElementById("new_email").value, document.getElementById("new_postcode").value);
+    // new walker validation and post
+    self.submitWalker = function () {
+        if (self.errors().length == 0) {
+            alert('Thank you.');
+            self.createWalker();
+        } else {
+            alert('Please check your submission.');
+            self.errors.showAllMessages();
+        }
+    }
+
+    self.errors = ko.validation.group(self);
+
+    // post data to server
+    self.createWalker = function() {    
+        var dataToSave = new DogWalker(self.k_new_user, self.k_new_phone, 
+            self.k_new_phone, self.k_new_postcode);
         $.ajax({
             url: "/api/walkers",
             type: "POST",
@@ -76,14 +112,13 @@ function ResultsViewModel() {
             dataType:"json",
             success: function (result) {
                     alert("Success");
+                    $('#create-tab')[0].reset();
+                    $('#loginModal').modal('hide');
                      },
             error: function (result) {
                 alert(result.responseText);
                 }
-        });
-        $('#create_tab')[0].reset();
-        $('#loginModal').modal('hide');
-
+        });    
     }
 }
 
@@ -92,11 +127,17 @@ $.ajax({
     type:'GET',
     dataType:'json',
     success: function(data) {
-        console.log("get all walkers success");
+        console.log(data.length);
     }
 });
 
 $('a[data-toggle="tab"]:first').tab('show');
+
+$('#loginModal').on('hide', function () {
+    $('span').css({display: "none" });
+    $('#create-tab')[0].reset();
+    $('#login-tab')[0].reset();
+});
 
 var resultsModel = new ResultsViewModel();
 resultsModel.k_query.subscribe(resultsModel.search);
@@ -119,8 +160,9 @@ function initialize() {
         var infowindow = new google.maps.InfoWindow({
         map: map,
         position: pos,
-        content: 'Location found using HTML5.'
+        content: 'Ottawa'
     });
+        //center not working without info window
         map.setCenter(pos);
     }, function() {
         handleNoGeolocation(true);

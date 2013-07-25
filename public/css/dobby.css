@@ -55,6 +55,8 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 
 #loginModal {
     width: 300px;
+    height: auto;
+    min-height: 200px;
     margin-left: -150px;
 }
 
@@ -75,4 +77,41 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 .postcode {
     margin-top: 7px;
 }
+
+.validationMessage {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  width: 150px;
+  padding: 5px !important;
+  font-size: 12px !important;
+  font-weight: normal !important;
+  line-height: 15px !important;
+  border: 1px solid #ff8686;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  z-index: 999999;
+  -webkit-box-shadow: 1px 1px 1px 1px #eeeeee;
+  box-shadow: 1px 1px 1px 1px color;
+  /* arrow */ 
+}
+/*
+.validationMessage:before, .validationMessage:after {
+    z-index: 999999;
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    margin-top: -5px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 8px solid #ff8686; }
+.validationMessage:before {
+    border-right-color: #ff8686;
+    left: -9px; }*/
 

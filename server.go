@@ -58,6 +58,7 @@ func (serv WalkerService) AddWalker(postedObj WalkerType) {
 		return
 	}
 	postedObj.Uid = strconv.Itoa(len(walkerData) + 1)
+	// validate the data
 	walkerData = append(walkerData, postedObj)
 }
 
