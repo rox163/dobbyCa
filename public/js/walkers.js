@@ -50,12 +50,12 @@ function ResultsViewModel() {
 
     // login modal observables
     self.k_new_user = ko.observable().extend({ required: true, minLength: 2 });
-    self.k_new_phone = ko.observable().extend({ 
-        required: true, 
+    self.k_new_phone = ko.observable().extend({
+        required: true,
         pattern: {
                     message: '10 digit number only',
                     params: '^[2-9]{1}[0-9]{2}[0-9]{7}$'
-                 } 
+                 }
         });
     self.k_new_email = ko.observable().extend({ required: true, email: true });
     self.k_new_postcode = ko.observable().extend({ required: true });
@@ -68,7 +68,7 @@ function ResultsViewModel() {
             type:'GET',
             dataType:'json',
             success: function(data) {
-                $.each(data, function(index) {                    
+                $.each(data, function(index) {
                     if (data[index].Uid > self.Walkers.length) {
                         console.log(data[index]);
                         temp.push(new DogWalker(data[index].User, data[index].Phone, data[index].Email, data[index].Postcode));
@@ -80,15 +80,14 @@ function ResultsViewModel() {
             error: function() {
                 alert("error");
             }
-        });        
+        });
         console.log(self.Walkers().length);
         self.k_showWalkers(true);
         plotMarkers();
     }
 
     self.k_walkers = ko.dependentObservable(function() {
-        self.bindToWalkers();
-        return ko.utils.arrayFilter(self.Walkers, function(walker) {
+        return ko.utils.arrayFilter(self.Walkers(), function(walker) {
             return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
     }, self);
@@ -136,7 +135,7 @@ function ResultsViewModel() {
             error: function (result) {
                 alert(result.responseText);
                 }
-        });    
+        });
     }
 }
 
