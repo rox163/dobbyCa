@@ -10,6 +10,7 @@ import (
 type WalkerType struct {
 	Uid      string
 	User     string
+	Password string
 	Phone    string
 	Email    string
 	Postcode string
@@ -18,8 +19,8 @@ type WalkerType struct {
 
 const lenSearchPath = len("/walkers")
 
-var walker1 = WalkerType{"1", "Pam Beasley", "8194561234", "asd@asd.com", "k1y4x8"}
-var walker2 = WalkerType{"2", "Jim Halpert", "6131234563", "TEST@test.com", "k2b8e5"}
+var walker1 = WalkerType{"1", "Pam Beasley", "123", "8194561234", "asd@asd.com", "k1y4x8"}
+var walker2 = WalkerType{"2", "Jim Halpert", "234", "6131234563", "TEST@test.com", "k2b8e5"}
 
 var walkerData = []WalkerType{walker1, walker2}
 
@@ -44,6 +45,7 @@ type WalkerService struct {
 	updateWalker gorest.EndPoint `method:"PUT" path:"/walkers/{uid:string}" postdata:"WalkerType"`
 }
 
+// ListWalkers returns the requested list of walkers
 func (serv WalkerService) ListWalkers() []WalkerType {
 	//return the walkers in a 5km radius around the postcode
 	//test := []string{"hello", "there"}
@@ -51,6 +53,7 @@ func (serv WalkerService) ListWalkers() []WalkerType {
 	return walkerData
 }
 
+// AddWalker adds the Walker obj posted by the client
 func (serv WalkerService) AddWalker(postedObj WalkerType) {
 	log.Printf("Walker: %+v", postedObj)
 	if postedObj.Uid != "" {

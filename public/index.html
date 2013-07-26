@@ -47,7 +47,7 @@
                     <input data-bind="value: k_query" id="postcode_input" class="input-medium search-query postcode" type="text"  placeholder="Enter your postal code"/>
                 </div>
                 <div class="span2 offset2">
-                    <a id="Submit" class="btn btn-medium btn-primary" data-bind="click: search">Search</a>
+                    <a id="Submit" class="btn btn-medium btn-primary top-buffer" data-bind="click: search">Search</a>
                 </div>
             </div>
         </div>
@@ -86,7 +86,8 @@
                     <div class="tab-pane fade" id="create">
                         <form id="create-tab" data-bind="submit: createWalker">
                             <div><input data-bind="value: k_new_user" type="text" placeholder="Name" value="" class="input-medium" required></div>
-                            <div><input type="password" placeholder="Password" value="" class="input-medium"></div>
+                            <div><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium"></div>
+                            <div><input data-bind="value: k_confirm, visible: isEntered" type="password" placeholder="Confirm Password" value="" class="input-medium"></div>
                             <div><input data-bind="value: k_new_phone" type="text" placeholder="5552342534" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_email" type="email" placeholder="myemail@abc.com" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_postcode" type="text" placeholder="Postal code" class="input-medium" required></div>

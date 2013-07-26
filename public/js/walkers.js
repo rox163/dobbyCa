@@ -13,13 +13,13 @@ var walkerData = [];
 //        "Postcode": "ky4x8"
 // }
 
-function DogWalker(user, phone, email, postcode) {
+function DogWalker(user, password, phone, email, postcode) {
     var self = this;
     self.user = user;
     self.phone = phone;
     self.email = email;
     self.postcode = postcode;
-    // password??
+    self.password = password;
     geocoder.geocode( {'address': self.postcode}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 self.lat_long = results[0].geometry.location;
@@ -41,15 +41,25 @@ function ResultsViewModel() {
     var self = this;
 
     self.Walkers = ko.observableArray();
-    self.bindToWalkers = function() {
-        self.Walkers();
-    }
+
     self.k_query = ko.observable('');
     // controls visibility of the list
     self.k_showWalkers = ko.observable(false);
 
     // login modal observables
-    self.k_new_user = ko.observable().extend({ required: true, minLength: 2 });
+    self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
+    
+    self.k_new_password = ko.observable('').extend({ required: true, minLength: 5});
+    self.isEntered = ko.computed(function() {
+        if (!self.k_new_password().length) return false;
+        return true;
+    })
+    self.k_confirm = ko.observable('').extend({ required: true });
+    self.isConfirmed = ko.computed(function() {
+        if (!self.k_new_password().length) return false;
+        return self.k_new_password() == self.k_confirm()
+    })
+
     self.k_new_phone = ko.observable().extend({
         required: true,
         pattern: {
@@ -71,7 +81,7 @@ function ResultsViewModel() {
                 $.each(data, function(index) {
                     if (data[index].Uid > self.Walkers.length) {
                         console.log(data[index]);
-                        temp.push(new DogWalker(data[index].User, data[index].Phone, data[index].Email, data[index].Postcode));
+                        temp.push(new DogWalker(data[index].User, data[index].Password, data[index].Phone, data[index].Email, data[index].Postcode));
                     }
                 });
                 // console.log(walkerData.length);
@@ -91,6 +101,7 @@ function ResultsViewModel() {
             return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
     }, self);
+
     //Show info window over map marker when walker user is clicked
     self.showDetail = function(walker) {
         for (var i = 0; i < markers.length; i++) {
@@ -105,11 +116,11 @@ function ResultsViewModel() {
 
     // new walker validation and post
     self.submitWalker = function () {
-        if (self.errors().length == 0) {
+        if (self.isConfirmed() && self.errors().length == 0) {
             alert('Thank you.');
             self.createWalker();
         } else {
-            //alert('Please check your submission.');
+            alert('Please check your submission.');
             self.errors.showAllMessages();
         }
     }
