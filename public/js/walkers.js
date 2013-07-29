@@ -35,8 +35,6 @@ ko.validation.init({
     grouping: { deep: true, observable: true }
 });
 
-
-
 function ResultsViewModel() {
     var self = this;
 
@@ -48,15 +46,23 @@ function ResultsViewModel() {
     self.k_showWalkers = ko.observable(false);
 
     // login modal observables
-    self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
-    
-    self.k_new_password = ko.observable('').extend({ required: true, minLength: 3});
+    self.k_email = ko.observable('').extend({ required: true, email: true });
+    self.k_password = ko.observable('').extend({ required: true });
+    self.isComplete = ko.computed(function() {
+        return (self.k_email().length > 0 && self.k_password().length > 0);        
+    });
 
-    self.k_confirm = ko.observable('').extend({ required: true });
+    // register walker modal observables    
+    self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
+    self.k_new_password = ko.observable('');
+
+    self.k_confirm = ko.observable('');
     self.isConfirmed = ko.computed(function() {
-        if (self.k_new_password().length > 0 && !self.k_confirm().length) return false;
-        return self.k_new_password() == self.k_confirm()
-    })
+        if (self.k_new_password().length > 0 && self.k_confirm().length == 0) {
+            return self.k_new_password() == self.k_confirm();
+        }
+        return false;
+    });
 
     self.k_new_phone = ko.observable().extend({
         required: true,
@@ -68,7 +74,36 @@ function ResultsViewModel() {
     self.k_new_email = ko.observable().extend({ required: true, email: true });
     self.k_new_postcode = ko.observable().extend({ required: true });
 
+    self.errors = ko.validation.group(self);
     // Actions
+    self.loginWalker = function() {
+        if (self.k_email().length == 0) {
+            $('#email-error').css({display: "inline-block" });
+        } else {
+            var dataToSend = self.k_email();
+            console.log(self.isComplete());
+            console.log(self.errors().length);
+            if (self.isComplete()) {
+                console.log("IN");
+                $.ajax({
+                    url: "/api/walkers" + "/" + dataToSend,
+                    type: "GET",
+                    dataType:"json",
+                    success: function (result) {
+                            alert("Success");
+                            $('#loginModal').modal('hide');
+                            },
+                    error: function (result) {
+                        alert(result.responseText);
+                        }
+                });
+            } else {
+                self.errors.showAllMessages();
+                alert('Please check your submission.');
+            }
+        }
+    }
+    
     self.search = function() {
         var temp =[];
         $.ajax({
@@ -78,10 +113,10 @@ function ResultsViewModel() {
             dataType:'json',
             success: function(data) {
                 $.each(data, function(index) {
-                    if (data[index].Uid > self.Walkers().length) {
-                        console.log(data[index]);
+                    // if (data[index].Uid > self.Walkers().length) {
+                        // console.log(data[index]);
                         temp.push(new DogWalker(data[index].User, data[index].Pwd, data[index].Phone, data[index].Email, data[index].Postcode));
-                    }
+                    // }
                 });
                 // console.log(walkerData.length);
                 self.Walkers(temp);
@@ -101,21 +136,10 @@ function ResultsViewModel() {
         });
     }, self);
 
-    //Show info window over map marker when walker user is clicked
-    self.showDetail = function(walker) {
-        for (var i = 0; i < markers.length; i++) {
-            if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(),
-                walker.lat_long.lat(), walker.lat_long.lng()) <= 0.1 ) {
-                infowindow.close();
-                infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
-                infowindow.open(map, markers[i]);
-            }
-        }
-    }
-
     // new walker validation and post
     self.submitWalker = function () {
-        if (self.isConfirmed() && self.errors().length == 0) {
+        if (self.isConfirmed()) {
+            console.log(self.k_confirm().length);
             alert('Thank you.');
             self.createWalker();
         } else {            
@@ -123,8 +147,6 @@ function ResultsViewModel() {
             self.errors.showAllMessages();
         }
     }
-
-    self.errors = ko.validation.group(self);
 
     // post data to server
     self.createWalker = function() {
@@ -139,13 +161,25 @@ function ResultsViewModel() {
             dataType:"json",
             success: function (result) {
                     alert("Success");
-                    $('#create-tab')[0].reset();
                     $('#loginModal').modal('hide');
                     },
             error: function (result) {
                 alert(result.responseText);
                 }
         });
+    }
+
+
+    //Show info window over map marker when walker user is clicked
+    self.showDetail = function(walker) {
+        for (var i = 0; i < markers.length; i++) {
+            if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(),
+                walker.lat_long.lat(), walker.lat_long.lng()) <= 0.1 ) {
+                infowindow.close();
+                infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
+                infowindow.open(map, markers[i]);
+            }
+        }
     }
 }
 

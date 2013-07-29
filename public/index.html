@@ -67,17 +67,18 @@
                             <!-- Username -->
                             <div class="control-group">
                                 <div class="controls">
-                                    <input type="text" name="login-name" placeholder="Email" class="input-medium">
+                                    <span id="email-error" class="validationMessage" style="display: none;">This is a required field</span>
+                                    <input data-bind="value: k_email" type="text" placeholder="Email" class="input-medium" required>
                                 </div>
                                 <!-- Password-->
                                 <div class="controls">
-                                    <input type="password" id="password" name="password" placeholder="Password" class="input-medium">
+                                    <input type="password" data-bind="value: k_password" placeholder="Password" class="input-medium" required>
                                 </div>
                             </div>
                             <div class="control-group">
                             <!-- Button -->
                                 <div class="controls">
-                                  <button class="btn btn-success">Login</button>
+                                  <button data-bind="click: loginWalker" class="btn btn-success">Login</button>
                                 </div>
                             </div>
                             </fieldset>
@@ -86,9 +87,10 @@
                     <div class="tab-pane fade" id="create">
                         <form id="create-tab" data-bind="submit: createWalker">
                             <div><input data-bind="value: k_new_user" type="text" placeholder="Name" value="" class="input-medium" required></div>
-                            <div><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium"></div>
+                            <div><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium" required></div>
                             <div><span class="validationMessage" data-bind="visible: !isConfirmed()">Passwords don't match!</span>
-                                <input data-bind="value: k_confirm" type="password" placeholder="Confirm Password" value="" class="input-medium"></div>
+                                <input data-bind="value: k_confirm" type="password" placeholder="Confirm Password" value="" class="input-medium">
+                            </div>
                             <div><input data-bind="value: k_new_phone" type="text" placeholder="10-digit phone number" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_email" type="email" placeholder="myemail@abc.com" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_postcode" type="text" placeholder="Postal code" class="input-medium" required></div>
