@@ -41,6 +41,7 @@ type WalkerService struct {
 	gorest.RestService `root:"/api/" consumes:"application/json" produces:"application/json"`
 
 	listWalkers  gorest.EndPoint `method:"GET" path:"/walkers" output:"[]WalkerType"`
+	getWalker    gorest.EndPoint `method:"GET" path:"/walkers/{email:string}" output:"WalkerType"`
 	addWalker    gorest.EndPoint `method:"POST" path:"/walkers" postdata:"WalkerType"`
 	updateWalker gorest.EndPoint `method:"PUT" path:"/walkers/{uid:string}" postdata:"WalkerType"`
 }
@@ -63,6 +64,18 @@ func (serv WalkerService) AddWalker(postedObj WalkerType) {
 	postedObj.Uid = strconv.Itoa(len(walkerData) + 1)
 	// validate the data
 	walkerData = append(walkerData, postedObj)
+}
+
+func (serv WalkerService) GetWalker(email string) (walker WalkerType) {
+	for _, value := range walkerData {
+		if value.Email == email {
+			log.Printf("Walker: %+v", value)
+			walker = value
+			return
+		}
+	}
+	serv.ResponseBuilder().SetResponseCode(404).Overide(true)
+	return
 }
 
 func (serv WalkerService) UpdateWalker(postedObj WalkerType, uid string) {
