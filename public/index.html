@@ -87,8 +87,9 @@
                         <form id="create-tab" data-bind="submit: createWalker">
                             <div><input data-bind="value: k_new_user" type="text" placeholder="Name" value="" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium"></div>
-                            <div><input data-bind="value: k_confirm, visible: isEntered" type="password" placeholder="Confirm Password" value="" class="input-medium"></div>
-                            <div><input data-bind="value: k_new_phone" type="text" placeholder="5552342534" class="input-medium" required></div>
+                            <div><span class="validationMessage" data-bind="visible: !isConfirmed()">Passwords don't match!</span>
+                                <input data-bind="value: k_confirm" type="password" placeholder="Confirm Password" value="" class="input-medium"></div>
+                            <div><input data-bind="value: k_new_phone" type="text" placeholder="10-digit phone number" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_email" type="email" placeholder="myemail@abc.com" class="input-medium" required></div>
                             <div><input data-bind="value: k_new_postcode" type="text" placeholder="Postal code" class="input-medium" required></div>
                             <div>

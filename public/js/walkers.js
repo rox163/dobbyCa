@@ -19,7 +19,7 @@ function DogWalker(user, password, phone, email, postcode) {
     self.phone = phone;
     self.email = email;
     self.postcode = postcode;
-    self.password = password;
+    self.pwd = password;
     geocoder.geocode( {'address': self.postcode}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 self.lat_long = results[0].geometry.location;
@@ -40,6 +40,7 @@ ko.validation.init({
 function ResultsViewModel() {
     var self = this;
 
+    // Observables
     self.Walkers = ko.observableArray();
 
     self.k_query = ko.observable('');
@@ -49,14 +50,11 @@ function ResultsViewModel() {
     // login modal observables
     self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
     
-    self.k_new_password = ko.observable('').extend({ required: true, minLength: 5});
-    self.isEntered = ko.computed(function() {
-        if (!self.k_new_password().length) return false;
-        return true;
-    })
+    self.k_new_password = ko.observable('').extend({ required: true, minLength: 3});
+
     self.k_confirm = ko.observable('').extend({ required: true });
     self.isConfirmed = ko.computed(function() {
-        if (!self.k_new_password().length) return false;
+        if (self.k_new_password().length > 0 && !self.k_confirm().length) return false;
         return self.k_new_password() == self.k_confirm()
     })
 
@@ -70,6 +68,7 @@ function ResultsViewModel() {
     self.k_new_email = ko.observable().extend({ required: true, email: true });
     self.k_new_postcode = ko.observable().extend({ required: true });
 
+    // Actions
     self.search = function() {
         var temp =[];
         $.ajax({
@@ -79,9 +78,9 @@ function ResultsViewModel() {
             dataType:'json',
             success: function(data) {
                 $.each(data, function(index) {
-                    if (data[index].Uid > self.Walkers.length) {
+                    if (data[index].Uid > self.Walkers().length) {
                         console.log(data[index]);
-                        temp.push(new DogWalker(data[index].User, data[index].Password, data[index].Phone, data[index].Email, data[index].Postcode));
+                        temp.push(new DogWalker(data[index].User, data[index].Pwd, data[index].Phone, data[index].Email, data[index].Postcode));
                     }
                 });
                 // console.log(walkerData.length);
@@ -119,7 +118,7 @@ function ResultsViewModel() {
         if (self.isConfirmed() && self.errors().length == 0) {
             alert('Thank you.');
             self.createWalker();
-        } else {
+        } else {            
             alert('Please check your submission.');
             self.errors.showAllMessages();
         }
@@ -129,7 +128,7 @@ function ResultsViewModel() {
 
     // post data to server
     self.createWalker = function() {
-        var dataToSave = new DogWalker(self.k_new_user(), self.k_new_phone(),
+        var dataToSave = new DogWalker(self.k_new_user(), self.k_new_password(), self.k_new_phone(),
             self.k_new_email(), self.k_new_postcode());
         $.ajax({
             url: "/api/walkers",
