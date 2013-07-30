@@ -35,6 +35,7 @@ ko.validation.init({
     grouping: { deep: true, observable: true }
 });
 
+
 function ResultsViewModel() {
     var self = this;
 
@@ -46,17 +47,17 @@ function ResultsViewModel() {
     self.k_showWalkers = ko.observable(false);
 
     // login modal observables
-    self.k_email = ko.observable('').extend({ required: true, email: true });
-    self.k_password = ko.observable('').extend({ required: true });
+    self.k_email = ko.observable('');
+    self.k_password = ko.observable('');
     self.isComplete = ko.computed(function() {
         return (self.k_email().length > 0 && self.k_password().length > 0);        
     });
 
-    // register walker modal observables    
+    // register walker modal observables - with validation plugin  
     self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
-    self.k_new_password = ko.observable('');
+    self.k_new_password = ko.observable('').extend({ required: true});
 
-    self.k_confirm = ko.observable('');
+    self.k_confirm = ko.observable('').extend({ required: true});
     self.isConfirmed = ko.computed(function() {
         if (self.k_new_password().length > 0 && self.k_confirm().length == 0) {
             return self.k_new_password() == self.k_confirm();
@@ -77,9 +78,8 @@ function ResultsViewModel() {
     self.errors = ko.validation.group(self);
     // Actions
     self.loginWalker = function() {
-        if (self.k_email().length == 0) {
-            $('#email-error').css({display: "inline-block" });
-        } else {
+        if (self.k_email().length > 0 && self.k_password().length > 0) {        
+            $('span').css({display: "none" });            
             var dataToSend = self.k_email();
             console.log(self.isComplete());
             console.log(self.errors().length);
@@ -91,16 +91,29 @@ function ResultsViewModel() {
                     dataType:"json",
                     success: function (result) {
                             alert("Success");
+                            self.k_password('');
+                            self.k_email('');
                             $('#loginModal').modal('hide');
                             },
                     error: function (result) {
-                        alert(result.responseText);
+                        alert("Invalid Login credentials" + result.responseText);
                         }
                 });
             } else {
                 self.errors.showAllMessages();
                 alert('Please check your submission.');
             }
+        } else {
+            if (self.k_email().length == 0) {
+                $('#email-error').css({display: "inline-block" });
+            } else {
+                $('#email-error').css({display: "none" });
+            }
+            if (self.k_password().length == 0) {
+               $('#password-error').css({display: "inline-block" });
+            } else {
+                $('#password-error').css({display: "none" });
+            }     
         }
     }
     
