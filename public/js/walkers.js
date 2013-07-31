@@ -26,14 +26,6 @@ function DogWalker(user, password, phone, email, postcode) {
             }
         });
 }
-// Initialise validation plugin
-ko.validation.init({
-    parseInputAttributes: false,
-    decorateElement: true,
-    insertMessages: true,
-    messagesOnModified: true,
-    grouping: { deep: true, observable: true }
-});
 
 
 function ResultsViewModel() {
@@ -54,28 +46,26 @@ function ResultsViewModel() {
     });
 
     // register walker modal observables - with validation plugin  
-    self.k_new_user = ko.observable('').extend({ required: true, minLength: 2 });
-    self.k_new_password = ko.observable('').extend({ required: true});
+    self.k_new_user = ko.observable('');
+    self.k_new_password = ko.observable('');
 
-    self.k_confirm = ko.observable('').extend({ required: true});
+    self.k_confirm = ko.observable('');
     self.isConfirmed = ko.computed(function() {
-        if (self.k_new_password().length > 0 && self.k_confirm().length == 0) {
+        if (self.k_new_password().length > 0 && self.k_confirm().length >= 0) {
             return self.k_new_password() == self.k_confirm();
         }
         return false;
     });
 
-    self.k_new_phone = ko.observable().extend({
-        required: true,
-        pattern: {
-                    message: '10 digit number only',
-                    params: '^[2-9]{1}[0-9]{2}[0-9]{7}$'
-                 }
-        });
-    self.k_new_email = ko.observable().extend({ required: true, email: true });
-    self.k_new_postcode = ko.observable().extend({ required: true });
+    self.k_new_phone = ko.observable('');
+        // pattern: {
+        //             message: '10 digit number only',
+        //             params: '^[2-9]{1}[0-9]{2}[0-9]{7}$'
+        //          }
 
-    self.errors = ko.validation.group(self);
+    self.k_new_email = ko.observable('');
+    self.k_new_postcode = ko.observable('');
+
     // Actions
     self.loginWalker = function() {
         if (self.k_email().length > 0 && self.k_password().length > 0) {        
@@ -151,13 +141,50 @@ function ResultsViewModel() {
 
     // new walker validation and post
     self.submitWalker = function () {
-        if (self.isConfirmed()) {
+        if (self.k_new_user().length >= 2 && self.isConfirmed()) {
+            $('span').css({display: "none" });
             console.log(self.k_confirm().length);
             alert('Thank you.');
+
             self.createWalker();
+
+            self.k_new_email('');
         } else {            
-            alert('Please check your submission.');
-            self.errors.showAllMessages();
+            showErrors();
+        }
+    }
+
+    // error display
+    function showErrors() {
+        if (self.k_new_user().length < 2) {
+            $('#user-error').css({display: "inline-block" });
+        } else {
+            $('#user-error').css({display: "none" });
+        }
+        if (self.k_new_password().length == 0) {
+            $('#new-pwd-error').css({display: "inline-block" });
+        } else {
+            $('#new-pwd-error').css({display: "none" });
+        }
+        if (!self.isConfirmed()) {
+            $('#confirm-error').css({display: "inline-block" });
+        } else {
+            $('#confirm-error').css({display: "none" });
+        }
+        if (self.k_new_phone().length == 0) {
+            $('#phone-error').css({display: "inline-block" });
+        } else {
+            $('#phone-error').css({display: "none" });
+        }
+        if (self.k_new_email().length == 0) {
+            $('#email-error').css({display: "inline-block" });
+        } else {
+            $('#email-error').css({display: "none" });
+        }
+        if (self.k_new_postcode().length == 0) {
+            $('#postcode-error').css({display: "inline-block" });
+        } else {
+            $('#postcode-error').css({display: "none" });
         }
     }
 

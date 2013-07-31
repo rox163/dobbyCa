@@ -88,14 +88,25 @@
                     </div>
                     <div class="tab-pane fade" id="create">
                         <form id="create-tab" data-bind="submit: createWalker">
-                            <div><input data-bind="value: k_new_user" type="text" placeholder="Name" value="" class="input-medium" required></div>
-                            <div><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium" required></div>
-                            <div><span class="validationMessage" data-bind="visible: !isConfirmed()">Passwords don't match!</span>
+                            <div>
+                                <span id="user-error" class="validationMessage" style="display: none;">This is a required field</span>
+                                <input data-bind="value: k_new_user" type="text" placeholder="Name" value="" class="input-medium" required>
+                            </div>
+                            <div>
+                                <span id="new-pwd-error" class="validationMessage" style="display: none;">This is a required field</span><input data-bind="value: k_new_password" type="password" placeholder="Password" value="" class="input-medium" required>
+                            </div>
+                            <div>
+                                <span id="confirm-error" class="validationMessage" style="display: none;">Passwords don't match!</span>
                                 <input data-bind="value: k_confirm" type="password" placeholder="Confirm Password" value="" class="input-medium">
                             </div>
-                            <div><input data-bind="value: k_new_phone" type="text" placeholder="10-digit phone number" class="input-medium" required></div>
-                            <div><input data-bind="value: k_new_email" type="email" placeholder="myemail@abc.com" class="input-medium" required></div>
-                            <div><input data-bind="value: k_new_postcode" type="text" placeholder="Postal code" class="input-medium" required></div>
+                            <div>
+                                <span id="phone-error" class="validationMessage" style="display: none;">This is a required field</span><input data-bind="value: k_new_phone" type="text" placeholder="10-digit phone number" class="input-medium" required>
+                            </div>
+                            <div>
+                                <span id="email-error" class="validationMessage" style="display: none;">This is a required field</span><input data-bind="value: k_new_email" type="email" placeholder="myemail@abc.com" class="input-medium" required>
+                            </div>
+                            <div>
+                                <span id="postcode-error" class="validationMessage" style="display: none;">This is a required field</span><input data-bind="value: k_new_postcode" type="text" placeholder="Postal code" class="input-medium" required></div>
                             <div>
                                 <button class="btn btn-success" data-bind="click: submitWalker">Create Account</button>
                             </div>
@@ -153,8 +164,9 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/bootstrap/js/bootstrap-select.min.js"></script>    
     <script type='text/javascript' src='/js/knockout-2.2.1.js'></script>
-    <script type="text/javascript" src='/js/knockout.validation.js'></script>
-    <script type="text/javascript" src='/js/knockout-ValidatedViewModel.js'></script>
+    <!-- 
+    // <script type="text/javascript" src='/js/knockout.validation.js'></script>
+    // <script type="text/javascript" src='/js/knockout-ValidatedViewModel.js'></script> -->
     <script type="text/javascript">$('.selectpicker').selectpicker();</script>
     <script src="./js/walkers.js"></script>
 </body>
