@@ -21,7 +21,7 @@ function DogWalker(user, password, phone, email, postcode) {
     self.postcode = postcode;
     self.pwd = password;
     geocoder.geocode( {'address': self.postcode}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+            if (status === google.maps.GeocoderStatus.OK) {
                 self.lat_long = results[0].geometry.location;
             }
         });
@@ -52,7 +52,7 @@ function ResultsViewModel() {
     self.k_confirm = ko.observable('');
     self.isConfirmed = ko.computed(function() {
         if (self.k_new_password().length > 0 && self.k_confirm().length >= 0) {
-            return self.k_new_password() == self.k_confirm();
+            return self.k_new_password() === self.k_confirm();
         }
         return false;
     });
@@ -94,12 +94,12 @@ function ResultsViewModel() {
                 alert('Please check your submission.');
             }
         } else {
-            if (self.k_email().length == 0) {
+            if (self.k_email().length === 0) {
                 $('#email-error').css({display: "inline-block" });
             } else {
                 $('#email-error').css({display: "none" });
             }
-            if (self.k_password().length == 0) {
+            if (self.k_password().length === 0) {
                $('#password-error').css({display: "inline-block" });
             } else {
                 $('#password-error').css({display: "none" });
@@ -161,7 +161,7 @@ function ResultsViewModel() {
         } else {
             $('#user-error').css({display: "none" });
         }
-        if (self.k_new_password().length == 0) {
+        if (self.k_new_password().length === 0) {
             $('#new-pwd-error').css({display: "inline-block" });
         } else {
             $('#new-pwd-error').css({display: "none" });
@@ -171,17 +171,17 @@ function ResultsViewModel() {
         } else {
             $('#confirm-error').css({display: "none" });
         }
-        if (self.k_new_phone().length == 0) {
+        if (self.k_new_phone().length === 0) {
             $('#phone-error').css({display: "inline-block" });
         } else {
             $('#phone-error').css({display: "none" });
         }
-        if (self.k_new_email().length == 0) {
+        if (self.k_new_email().length === 0) {
             $('#email-error').css({display: "inline-block" });
         } else {
             $('#email-error').css({display: "none" });
         }
-        if (self.k_new_postcode().length == 0) {
+        if (self.k_new_postcode().length === 0) {
             $('#postcode-error').css({display: "inline-block" });
         } else {
             $('#postcode-error').css({display: "none" });
@@ -282,7 +282,7 @@ function plotMarkers() {
 function codeAddress(walker) {
     var marker;
     geocoder.geocode( {'address': walker.postcode}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
+        if (status === google.maps.GeocoderStatus.OK) {
             marker = new google.maps.Marker({
                 position: results[0].geometry.location,
                 map: map,
