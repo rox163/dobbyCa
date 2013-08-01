@@ -141,51 +141,68 @@ function ResultsViewModel() {
 
     // new walker validation and post
     self.submitWalker = function () {
-        if (self.k_new_user().length >= 2 && self.isConfirmed()) {
+        if (showErrors() == 0) {
             $('span').css({display: "none" });
             console.log(self.k_confirm().length);
             alert('Thank you.');
 
             self.createWalker();
-
-            self.k_new_email('');
-        } else {            
-            showErrors();
+            resetLoginTab();
         }
+    }
+
+    function resetLoginTab() {
+        self.k_new_user('');
+        self.k_new_password('')
+        self.k_new_email('');
+        self.k_new_phone('');
+        self.k_new_postcode('');
+        self.k_confirm('');
     }
 
     // error display
     function showErrors() {
+        errors = 0;
         if (self.k_new_user().length < 2) {
             $('#user-error').css({display: "inline-block" });
+            errors++;
         } else {
             $('#user-error').css({display: "none" });
         }
         if (self.k_new_password().length === 0) {
             $('#new-pwd-error').css({display: "inline-block" });
+            errors++;
         } else {
             $('#new-pwd-error').css({display: "none" });
         }
-        if (!self.isConfirmed()) {
-            $('#confirm-error').css({display: "inline-block" });
-        } else {
-            $('#confirm-error').css({display: "none" });
-        }
         if (self.k_new_phone().length === 0) {
             $('#phone-error').css({display: "inline-block" });
+            errors++;
         } else {
             $('#phone-error').css({display: "none" });
         }
+        // email error not working 
+        console.log(self.k_new_email().length);
         if (self.k_new_email().length === 0) {
             $('#email-error').css({display: "inline-block" });
+            console.log("IN");
+            errors++;
         } else {
             $('#email-error').css({display: "none" });
         }
         if (self.k_new_postcode().length === 0) {
             $('#postcode-error').css({display: "inline-block" });
+            errors++;
         } else {
             $('#postcode-error').css({display: "none" });
+        }        
+        if (!self.isConfirmed()) {
+            $('#confirm-error').css({display: "inline-block" });
+            errors++;
+        } else {
+            $('#confirm-error').css({display: "none" });
         }
+        return errors;
     }
 
     // post data to server
@@ -208,7 +225,6 @@ function ResultsViewModel() {
                 }
         });
     }
-
 
     //Show info window over map marker when walker user is clicked
     self.showDetail = function(walker) {
