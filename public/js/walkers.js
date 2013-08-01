@@ -2,6 +2,7 @@ var ottawa = new google.maps.LatLng(45.4214, -75.6919);
 var map;
 var markers = [];
 var geocoder = new google.maps.Geocoder();;
+var loggedInWalker;
 
 var infowindow = new google.maps.InfoWindow();
 var contentString = '<div>' + '<h3>%user</h3>' + '<div>' + '<p>%phone</p>' + '</div>' + '</div>'; 
@@ -87,13 +88,13 @@ function ResultsViewModel() {
                     success: function (result) {
                         if (self.k_password() === result.Pwd) {
                             alert("Success");
+                            loggedInWalker = new DogWalker(result.User, result.Pwd, result.Phone, result.Email, result.Postcode);
+                            self.k_walkerName("Welcome " + loggedInWalker.user);
+                            $('#walker-name').css({display: "inline-block" });                            
                             self.k_password('');
-                            self.k_email('');
+                            self.k_email('');                            
                             $('#loginModal').modal('hide');
                             $('#login-link').css({display: "none" });
-
-                            self.k_walkerName("Welcome " + result.User);
-                            $('#walker-name').css({display: "inline-block" });
                         } else {
                             alert("Invalid login!");                            
                             self.k_password('');
@@ -244,12 +245,19 @@ function ResultsViewModel() {
     }
 }
 
-$('a[data-toggle="tab"]:first').tab('show');
+$(document).ready(function() {
+    $('a[data-toggle="tab"]:first').tab('show');
+    $('#walker-name').popover({
+        placement: 'bottom',
+        html: 'true',
+        content: '<button type="button" class="btn-medium" onclick="">Logout</button>'      
+    });
 
-$('#loginModal').on('hide', function () {
-    $('span').css({display: "none" });
-    $('#create-tab')[0].reset();
-    $('#login-tab')[0].reset();
+    $('#loginModal').on('hide', function () {
+        $('span').css({display: "none" });
+        $('#create-tab')[0].reset();
+        $('#login-tab')[0].reset();
+    });
 });
 
 var resultsModel = new ResultsViewModel();
