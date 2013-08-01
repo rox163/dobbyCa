@@ -37,6 +37,7 @@ function ResultsViewModel() {
     self.k_query = ko.observable('');
     // controls visibility of the list
     self.k_showWalkers = ko.observable(false);
+    self.k_walkerName = ko.observable('');
 
     // login modal observables
     self.k_email = ko.observable('');
@@ -66,13 +67,17 @@ function ResultsViewModel() {
     self.k_new_email = ko.observable('');
     self.k_new_postcode = ko.observable('');
 
+    self.k_walkers = ko.dependentObservable(function() {
+        return ko.utils.arrayFilter(self.Walkers(), function(walker) {
+            return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
+        });
+    }, self);
+
     // Actions
     self.loginWalker = function() {
         if (self.k_email().length > 0 && self.k_password().length > 0) {        
             $('span').css({display: "none" });            
             var dataToSend = self.k_email();
-            console.log(self.isComplete());
-            console.log(self.errors().length);
             if (self.isComplete()) {
                 console.log("IN");
                 $.ajax({
@@ -80,17 +85,26 @@ function ResultsViewModel() {
                     type: "GET",
                     dataType:"json",
                     success: function (result) {
+                        if (self.k_password() === result.Pwd) {
                             alert("Success");
                             self.k_password('');
                             self.k_email('');
                             $('#loginModal').modal('hide');
-                            },
+                            $('#login-link').css({display: "none" });
+
+                            self.k_walkerName("Welcome " + result.User);
+                            $('#walker-name').css({display: "inline-block" });
+                        } else {
+                            alert("Invalid login!");                            
+                            self.k_password('');
+                        }
+                    },
                     error: function (result) {
-                        alert("Invalid Login credentials" + result.responseText);
+                        alert("Invalid login!" + result.responseText);
+                        self.k_password('');
                         }
                 });
             } else {
-                self.errors.showAllMessages();
                 alert('Please check your submission.');
             }
         } else {
@@ -100,7 +114,7 @@ function ResultsViewModel() {
                 $('#email-error').css({display: "none" });
             }
             if (self.k_password().length === 0) {
-               $('#password-error').css({display: "inline-block" });
+                $('#password-error').css({display: "inline-block" });
             } else {
                 $('#password-error').css({display: "none" });
             }     
@@ -116,10 +130,7 @@ function ResultsViewModel() {
             dataType:'json',
             success: function(data) {
                 $.each(data, function(index) {
-                    // if (data[index].Uid > self.Walkers().length) {
-                        // console.log(data[index]);
-                        temp.push(new DogWalker(data[index].User, data[index].Pwd, data[index].Phone, data[index].Email, data[index].Postcode));
-                    // }
+                    temp.push(new DogWalker(data[index].User, data[index].Pwd, data[index].Phone, data[index].Email, data[index].Postcode));      
                 });
                 // console.log(walkerData.length);
                 self.Walkers(temp);
@@ -132,12 +143,6 @@ function ResultsViewModel() {
         self.k_showWalkers(true);
         plotMarkers();
     }
-
-    self.k_walkers = ko.dependentObservable(function() {
-        return ko.utils.arrayFilter(self.Walkers(), function(walker) {
-            return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
-        });
-    }, self);
 
     // new walker validation and post
     self.submitWalker = function () {
