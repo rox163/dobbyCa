@@ -1,11 +1,11 @@
 var ottawa = new google.maps.LatLng(45.4214, -75.6919);
 var map;
-var markers = [];
+var gMarkers = [];
 var geocoder = new google.maps.Geocoder();
 var loggedInWalker;
 
 var infowindow = new google.maps.InfoWindow();
-var contentString = '<div>' + '<h3>%user</h3>' + '<div>' + '<p>%phone</p>' + '</div>' + '</div>';
+var contentString = '<div>' + '<h4>%user</h4>' + '<p>%phone</p>' + '</div>';
 var walkerData = [];
 // {
 //        "User": "Dwight",
@@ -141,7 +141,7 @@ function ResultsViewModel() {
         });
         console.log(self.Walkers().length);
         self.k_showWalkers(true);
-        plotMarkers();
+        plotMarkers(self.k_walkers());
     };
 
     // new walker validation and post
@@ -233,12 +233,13 @@ function ResultsViewModel() {
 
     //Show info window over map marker when walker user is clicked
     self.showDetail = function (walker) {
-        for (var i = 0; i < markers.length; i++) {
-            if (getDistanceFromLatLonInKm(markers[i].position.lat(), markers[i].position.lng(),
-                    walker.lat_long.lat(), walker.lat_long.lng()) <= 0.1) {
+        for (var i = 0; i < gMarkers.length; i++) {
+            if (getDistanceFromLatLonInKm(gMarkers[i].position.lat(), gMarkers[i].position.lng(),
+                    walker.lat_long.lat(), walker.lat_long.lng()) <= 0.01) {                
+                map.setCenter(gMarkers[i].getPosition());
                 infowindow.close();
                 infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
-                infowindow.open(map, markers[i]);
+                infowindow.open(map, gMarkers[i]);
             }
         }
     }
@@ -276,11 +277,11 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(function (position) {
             var pos = new google.maps.LatLng(position.coords.latitude,
                 position.coords.longitude);
-            var infowindow = new google.maps.InfoWindow({
+            /*var infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
                 content: 'Ottawa'
-            });
+            });*/
             //center not working without info window
             map.setCenter(pos);
         }, function () {
@@ -294,14 +295,13 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-function plotMarkers() {
-    var filtered_walkers = resultsModel.k_walkers();
+function plotMarkers(filtered_walkers) {    
     setAllMap(null);
-    markers = [];
     for (var i=0; i < filtered_walkers.length; i++) {
         codeAddress(filtered_walkers[i]);
     }
     setAllMap(map);
+    google.maps.event.trigger(map, "resize");
 }
 
 // Convert postcode to Lat/Long and create marker
@@ -324,44 +324,13 @@ function codeAddress(walker) {
             infowindow.open(map, marker);
         }
         google.maps.event.addListener(marker, 'click', openInfoWindow);
-        markers.push(marker);
+        gMarkers.push(marker);
+        map.setCenter(marker.getPosition());
     });
 }
 
 function setAllMap(map) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+    for (var i = 0; i < gMarkers.length; i++) {
+        gMarkers[i].setMap(map);
     }
-}
-
-function handleNoGeolocation(errorFlag) {
-    var content, options, infowindow;
-    if (errorFlag) {
-        content = 'Error: The Geolocation service failed.';
-    } else {
-        content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-    options = {
-        map: map,
-        position: ottawa,
-        content: content
-    };
-    infowindow = new google.maps.InfoWindow(options);
-    map.setCenter(options.position);
-}
-
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2 - lat1);  // deg2rad below
-    var dLon = deg2rad(lon2 - lon1);
-    var a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c; // Distance in km
-    return d;
-}
-
-function deg2rad(deg) {
-    return deg * (Math.PI / 180)
 }

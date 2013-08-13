@@ -10,7 +10,7 @@ import (
 type WalkerType struct {
 	Uid      string
 	User     string
-	Pwd string
+	Pwd      string
 	Phone    string
 	Email    string
 	Postcode string
