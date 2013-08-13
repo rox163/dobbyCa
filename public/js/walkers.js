@@ -4,8 +4,23 @@ var gMarkers = [];
 var geocoder = new google.maps.Geocoder();
 var loggedInWalker;
 
-var infowindow = new google.maps.InfoWindow();
-var contentString = '<div>' + '<h4>%user</h4>' + '<p>%phone</p>' + '</div>';
+var infobox = new InfoBox();
+var contentString = '<div>' + '<h4>%user</h4>' + '<p>%phone</p>' + '</div>';    
+    //'<div>' + '<h4>%user</h4>' + '<p>%phone</p>' + '</div>';
+var infoBoxOptions = {
+    boxStyle: {
+        border: "1px solid black",
+        background: "white",
+        width: "200px",
+        pixelOffset: new google.maps.Size(-100, 0),
+        padding: "2px",
+        textAlign: "center",
+        opacity: 0.8
+    },
+    pane: "floatPane",
+    maxWidth: 0    
+}
+
 var walkerData = [];
 // {
 //        "User": "Dwight",
@@ -132,16 +147,23 @@ function ResultsViewModel() {
                 $.each(data, function (index) {
                     temp.push(new DogWalker(data[index].User, data[index].Pwd, data[index].Phone, data[index].Email, data[index].Postcode));
                 });
-                // console.log(walkerData.length);
                 self.Walkers(temp);
             },
             error: function () {
                 alert("error");
             }
         });
-        console.log(self.Walkers().length);
-        self.k_showWalkers(true);
-        plotMarkers(self.k_walkers());
+        console.log(self.k_walkers().length);
+        //if (self.k_walkers().length > 0) {         
+            self.k_showWalkers(true);
+            plotMarkers(self.k_walkers());
+        /*} else {
+            //no matching results            
+            infobox.close();
+            setAllMap(null);
+            gMarkers = [];
+            alert("Sorry! No Walkers found near your postcode!");
+        }*/
     };
 
     // new walker validation and post
@@ -149,7 +171,6 @@ function ResultsViewModel() {
         if (showErrors() === 0) {
             $('span').css({display: "none" });
             console.log(self.k_confirm().length);
-            alert('Thank you.');
 
             self.createWalker();
             resetLoginTab();
@@ -237,9 +258,10 @@ function ResultsViewModel() {
             if (getDistanceFromLatLonInKm(gMarkers[i].position.lat(), gMarkers[i].position.lng(),
                     walker.lat_long.lat(), walker.lat_long.lng()) <= 0.01) {                
                 map.setCenter(gMarkers[i].getPosition());
-                infowindow.close();
-                infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
-                infowindow.open(map, gMarkers[i]);
+                infobox.close();
+                infobox.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
+                infobox.setOptions(infoBoxOptions);
+                infobox.open(map, gMarkers[i]);
             }
         }
     }
@@ -266,7 +288,6 @@ ko.applyBindings(resultsModel);
 
 // Map loading
 function initialize() {
-
     var mapOptions = {
         zoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -275,33 +296,27 @@ function initialize() {
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                position.coords.longitude);
-            /*var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: 'Ottawa'
-            });*/
-            //center not working without info window
-            map.setCenter(pos);
+            map.setCenter(new google.maps.LatLng(position.coords.latitude,
+                position.coords.longitude));
         }, function () {
             handleNoGeolocation(true);
         });
     } else {
     // Browser doesn't support Geolocation
         handleNoGeolocation(false);
-    }
+    }    
 }
-
 google.maps.event.addDomListener(window, 'load', initialize);
 
-function plotMarkers(filtered_walkers) {    
+function plotMarkers() {
+    var filtered_walkers = resultsModel.k_walkers();
     setAllMap(null);
+    gMarkers.length = 0;
+    infobox.close();    
     for (var i=0; i < filtered_walkers.length; i++) {
         codeAddress(filtered_walkers[i]);
     }
-    setAllMap(map);
-    google.maps.event.trigger(map, "resize");
+    //setAllMap(map);    
 }
 
 // Convert postcode to Lat/Long and create marker
@@ -319,13 +334,14 @@ function codeAddress(walker) {
         }
          //create listener for marker infowindow and set content
         function openInfoWindow() {
-            infowindow.close();
-            infowindow.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
-            infowindow.open(map, marker);
+            infobox.close();
+            infobox.setContent(contentString.replace('%user', walker.user).replace('%phone', walker.phone));
+            infobox.setOptions(infoBoxOptions);
+            infobox.open(map, marker);
         }
         google.maps.event.addListener(marker, 'click', openInfoWindow);
         gMarkers.push(marker);
-        map.setCenter(marker.getPosition());
+       // map.setCenter(marker.getPosition());
     });
 }
 

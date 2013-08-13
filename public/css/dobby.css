@@ -46,9 +46,17 @@ body {
 }
 
 .map {
-    width: 100%;
-    height: 400px;
+    width: 352px;
+    height: 365px;
+    float: left;
 }
+
+.col2 {
+    width: 342px;   
+    height: 365px;
+    float: right;
+} 
+
 /** FIX for Bootstrap and Google Maps Info window styes problem **/
 img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
     max-width: none;
@@ -61,11 +69,46 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
     margin-left: -150px;
 }
 
+@media (min-width: 768px) and (max-width: 979px) {
+    .map {
+        width: 342px;   
+        height: 365px;
+        float:left;
+    }
+    .col2 {
+        width: 342px;   
+        height: 365px;
+        float: right;
+    }    
+}
+
+@media (min-width: 990px) {
+    .map {
+        width: 440px;
+        height: 365px;
+        float: left;
+    }
+    .col2 {
+        width: 430px;   
+        height: 365px;
+        float: right;
+    }  
+}
+
 @media (max-width: 767px) {
     #loginModal {
         width: 300px;
         margin-left: 150px;
     }
+    .map {
+        width: 552px;
+        height: 365px;
+    }
+    .col2 {
+        width: 552px;   
+        height: 365px;
+        float: left;
+    }  
 }
 
 @media (max-width: 480px) {
@@ -73,6 +116,14 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
         width: 300px;
         margin-left: 50px;
     }
+    .map {
+        width: 302px;  
+        height: 265px;
+    }
+    .col2 {
+        width: 302px;   
+        height: 265px;
+    }  
 }
 
 .postcode {
@@ -81,22 +132,22 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 
 .validationMessage {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
-  width: 150px;
-  padding: 5px;
-  font-size: 12px ;
-  font-weight: normal;
-  line-height: 15px;
-  border: 1px solid #ff8686;
-  border-radius: 4px;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  z-index: 999999;
-  -webkit-box-shadow: 1px 1px 1px 1px #eeeeee;
-  box-shadow: 1px 1px 1px 1px color;
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    width: 150px;
+    padding: 5px;
+    font-size: 12px ;
+    font-weight: normal;
+    line-height: 15px;
+    border: 1px solid #ff8686;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 9999;
+    -webkit-box-shadow: 1px 1px 1px 1px #eeeeee;
+    box-shadow: 1px 1px 1px 1px color;
 }
 
 
