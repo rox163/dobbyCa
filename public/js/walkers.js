@@ -313,6 +313,7 @@ function plotMarkers() {
     setAllMap(null);
     gMarkers.length = 0;
     infobox.close();    
+    google.maps.event.trigger(map, "resize");
     for (var i=0; i < filtered_walkers.length; i++) {
         codeAddress(filtered_walkers[i]);
     }
