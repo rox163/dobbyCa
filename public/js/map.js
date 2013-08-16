@@ -1,3 +1,5 @@
+
+
 function handleNoGeolocation(errorFlag) {
     var content, options, infowindow;
     if (errorFlag) {

@@ -11,11 +11,11 @@ var infoBoxOptions = {
     boxStyle: {
         border: "1px solid black",
         background: "white",
-        width: "200px",
+        width: "180px",
         pixelOffset: new google.maps.Size(-100, 0),
         padding: "2px",
         textAlign: "center",
-        opacity: 0.8
+        opacity: 0.85
     },
     pane: "floatPane",
     maxWidth: 0    
@@ -24,6 +24,7 @@ var infoBoxOptions = {
 var walkerData = [];
 // {
 //        "User": "Dwight",
+//        "Pwd": "123", 
 //        "Phone": "6472342334",
 //        "Email": "dwight@gmgirn.com",
 //        "Postcode": "ky4x8"
@@ -45,15 +46,13 @@ function DogWalker(user, password, phone, email, postcode) {
 
 function ResultsViewModel() {
     var self = this;
-
     // Observables
     self.Walkers = ko.observableArray();
-
     self.k_query = ko.observable('');
-    // controls visibility of the list
-    self.k_showWalkers = ko.observable(false);
     self.k_walkerName = ko.observable('');
-
+    // controls visibility of the list
+    self.k_showWalkers = ko.observable(false);    
+    
     // login modal observables
     self.k_email = ko.observable('');
     self.k_password = ko.observable('');
@@ -64,7 +63,6 @@ function ResultsViewModel() {
     // register walker modal observables - with validation plugin  
     self.k_new_user = ko.observable('');
     self.k_new_password = ko.observable('');
-
     self.k_confirm = ko.observable('');
     self.isConfirmed = ko.computed(function () {
         if (self.k_new_password().length > 0 && self.k_confirm().length >= 0) {
@@ -72,18 +70,17 @@ function ResultsViewModel() {
         }
         return false;
     });
-
     self.k_new_phone = ko.observable('');
         // pattern: {
         //             message: '10 digit number only',
         //             params: '^[2-9]{1}[0-9]{2}[0-9]{7}$'
         //          }
-
     self.k_new_email = ko.observable('');
     self.k_new_postcode = ko.observable('');
 
     self.k_walkers = ko.dependentObservable(function () {
         return ko.utils.arrayFilter(self.Walkers(), function (walker) {
+          // filter by distance
             return walker.postcode.toLowerCase().indexOf(self.k_query().toLowerCase()) >= 0;
         });
     }, self);
@@ -286,10 +283,11 @@ var resultsModel = new ResultsViewModel();
 resultsModel.k_query.subscribe(resultsModel.search);
 ko.applyBindings(resultsModel);
 
+google.maps.event.addDomListener(window, 'load', initialize);
 // Map loading
 function initialize() {
     var mapOptions = {
-        zoom: 8,
+        zoom: 11,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
@@ -306,18 +304,24 @@ function initialize() {
         handleNoGeolocation(false);
     }    
 }
-google.maps.event.addDomListener(window, 'load', initialize);
 
 function plotMarkers() {
     var filtered_walkers = resultsModel.k_walkers();
     setAllMap(null);
     gMarkers.length = 0;
-    infobox.close();    
+    infobox.close();
+    // center map
+    geocoder.geocode({'address': resultsModel.k_query()}, function (results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+        } else {
+            map.setCenter(ottawa);
+        }
+    });
     google.maps.event.trigger(map, "resize");
     for (var i=0; i < filtered_walkers.length; i++) {
         codeAddress(filtered_walkers[i]);
-    }
-    //setAllMap(map);    
+    }   
 }
 
 // Convert postcode to Lat/Long and create marker
@@ -342,7 +346,6 @@ function codeAddress(walker) {
         }
         google.maps.event.addListener(marker, 'click', openInfoWindow);
         gMarkers.push(marker);
-       // map.setCenter(marker.getPosition());
     });
 }
 
