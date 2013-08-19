@@ -19,8 +19,8 @@ type WalkerType struct {
 
 const lenSearchPath = len("/walkers")
 
-var walker1 = WalkerType{"1", "Pam Beasley", "123", "8194561234", "asd@asd.com", "k1y4x8"}
-var walker2 = WalkerType{"2", "Jim Halpert", "234", "6131234563", "TEST@test.com", "k2b8e5"}
+var walker1 = WalkerType{"1", "Pam Beasley", "123", "(819) 456-1234", "asd@asd.com", "k1y4x8"}
+var walker2 = WalkerType{"2", "Jim Halpert", "234", "(613) 123-4563", "TEST@test.com", "k2b8e5"}
 
 var walkerData = []WalkerType{walker1, walker2}
 
@@ -56,14 +56,13 @@ func (serv WalkerService) ListWalkers() []WalkerType {
 
 // AddWalker adds the Walker obj posted by the client
 func (serv WalkerService) AddWalker(postedObj WalkerType) {
-	log.Printf("Walker: %+v", postedObj)
 	if postedObj.Uid != "" {
 		serv.ResponseBuilder().SetResponseCode(400)
 		return
 	}
 	postedObj.Uid = strconv.Itoa(len(walkerData) + 1)
-	// validate the data
-	walkerData = append(walkerData, postedObj)
+	walkerData = append(walkerData, postedObj)    
+	log.Printf("Walker: %+v", postedObj)
 }
 
 func (serv WalkerService) GetWalker(email string) (walker WalkerType) {

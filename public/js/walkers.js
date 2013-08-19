@@ -12,7 +12,7 @@ var infoBoxOptions = {
         border: "1px solid black",
         background: "white",
         width: "180px",
-        pixelOffset: new google.maps.Size(-100, 0),
+        pixelOffset: new google.maps.Size(-120, 0),
         padding: "2px",
         textAlign: "center",
         opacity: 0.85
@@ -53,6 +53,9 @@ function ResultsViewModel() {
     // controls visibility of the list
     self.k_showWalkers = ko.observable(false);    
     
+    // switch for results found
+    self.k_resultsFound = ko.observable(false);
+    
     // login modal observables
     self.k_email = ko.observable('');
     self.k_password = ko.observable('');
@@ -60,7 +63,7 @@ function ResultsViewModel() {
         return (self.k_email().length > 0 && self.k_password().length > 0);
     });
 
-    // register walker modal observables - with validation plugin  
+    // register new walker modal observables  
     self.k_new_user = ko.observable('');
     self.k_new_password = ko.observable('');
     self.k_confirm = ko.observable('');
@@ -151,16 +154,18 @@ function ResultsViewModel() {
             }
         });
         console.log(self.k_walkers().length);
-        //if (self.k_walkers().length > 0) {         
-            self.k_showWalkers(true);
+        self.k_showWalkers(true);
+        if (self.k_walkers().length > 0) {         
+            self.k_resultsFound(true);
             plotMarkers(self.k_walkers());
-        /*} else {
-            //no matching results            
+        } else {
+            //no matching results
+            self.k_resultsFound(false);
             infobox.close();
             setAllMap(null);
             gMarkers = [];
             alert("Sorry! No Walkers found near your postcode!");
-        }*/
+        }
     };
 
     // new walker validation and post
@@ -266,6 +271,9 @@ function ResultsViewModel() {
 
 $(document).ready(function () {
     $('a[data-toggle="tab"]:first').tab('show');
+    
+    $("#new-phone").mask("(999) 999-9999");
+    
     $('#walker-name').popover({
         placement: 'bottom',
         html: 'true',
